@@ -1,7 +1,27 @@
+class Person:
+    def __init__(self):
+        self.name: ''
+        self.date: ''
+        self.mannerOfDeath: ''
+        self.armed: ''
+        self.age: ''
+        self.gender: ''
+        self.race: ''
+        self.city: ''
+        self.state: ''
+        self.signsOfMentalIllness: ''
+        self.threatLevel: ''
+        self.flee: ''
+        self.bodyCamera: ''
+        self.armsCategory: ''
+
+
 class Death:  # Class for a list of the top 10 ways people were killed
     def __init__(self):
         self.form = ''
-        self.gender = False  # True for Famale and False for Male
+        self.male = 0
+        self.female = 0
+        self.unknown = 0
 
 
 class Weapons:  # This class will help with weapons accounts for the semester
@@ -53,34 +73,57 @@ def chooseMenuOption():  # The Menu
 # Op 1 - Load data of file
 def LoadFile(name):
     try:
+        firstLine = True
         dataBase = []
         file = open(name, 'r')
         for line in file:
-            data = line.split(';')
-            dataBase.append((data[0], data))
+            if not firstLine:
+                data = line.split(';')
+                p = Person()
+                p.name = data[1]
+                p.date = data[2]
+                p.mannerOfDeath = data[3]
+                p.armed = data[4]
+                p.age = data[5]
+                p.gender = data[6]
+                p.race = data[7]
+                p.city = data[8]
+                p.state = data[9]
+                p.signsOfMentalIllness = data[10]
+                p.threatLevel = data[11]
+                p.flee = data[12]
+                p.bodyCamera = data[13]
+                p.armsCategory = data[14]
+                dataBase.append((data[0], p))
+            else:
+                firstLine = False
         file.close()
-        showMessage('Dados Carregados com sucesso')
+        showMessage('Data Loaded with success')
         return dict(dataBase)
 
     except:
         showMessageError('Error returned')
 
+
 # Show Information about one person
 def showInformation(data, key):
     columns = data[key]
-    print("Name:", columns[1], "\n"
-          "Date:", columns[2], "\n"
-          "Manner of death:", columns[3], "\n"
-          "Armed:", columns[4], "\n"
-          "Age:", columns[5], "\n"
-          "Gender:", columns[6], "\n"
-          "Race:", columns[7], "\n"
-          "City:", columns[8], "State:", columns[9], "\n"
-          "Signs of mental illness:", columns[10], "\n"
-          "Threat level:", columns[11], "\n"
-          "Flee:", columns[12], "\n"
-          "Body camera:", columns[13], "\n"
-          "Arms category:", columns[14]
+    print("Name:", columns.name, "\n"
+                               "Date:", columns.date, "\n"
+                                                    "Manner of death:", columns.mannerOfDeath, "\n"
+                                                                                    "Armed:", columns.armed, "\n"
+                                                                                                          "Age:",
+          columns.age, "\n"
+                      "Gender:", columns.gender, "\n"
+                                             "Race:", columns.race, "\n"
+                                                                  "City:", columns.city, "State:", columns.state, "\n"
+                                                                                                             "Signs of mental illness:",
+          columns.signsOfMentalIllness, "\n"
+                       "Threat level:", columns.threatLevel, "\n"
+                                                     "Flee:", columns.flee, "\n"
+                                                                           "Body camera:", columns.bodyCamera, "\n"
+                                                                                                        "Arms category:",
+          columns.armsCategory
           )
 
 
@@ -88,6 +131,57 @@ def showInformation(data, key):
 def ShowData(data):
     for key in data.keys():
         showInformation(data, key)
+
+
+def MainFormsOfDeath(data):  # Creating a list of the top 10 forms of death
+    mainFormsOfDeath = []
+    for value in data.values():
+        exist = VerifyElementInList(mainFormsOfDeath, value.mannerOfDeath)
+        if not exist:
+            mainFormsOfDeath.append(value.mannerOfDeath)
+    return mainFormsOfDeath
+
+
+def VerifyElementInList(list, name):  # Verify if some element is in a list
+    if name in list:
+        return True
+    else:
+        return False
+
+
+def AmountOfDeathsSex(data):  # Create detail list of death per gender
+    listOfFormsDeath = MainFormsOfDeath(data)
+    listWithAmount = []
+    for form in listOfFormsDeath:
+        contM = 0
+        contF = 0
+        contUnknown = 0
+        for value in data.values():
+            if form == value.mannerOfDeath:
+                if value.gender == 'M':
+                    contM += 1
+                elif value.gender == 'F':
+                    contF += 1
+                else:
+                    contUnknown += 1
+        d = Death()
+        d.form = form
+        d.male = contM
+        d.female = contF
+        d.unknown = contUnknown
+        listWithAmount.append(d)
+    return listWithAmount
+
+
+# Op 3
+def ShowDetailsOfDeathPerGender(data):  # Show the final result
+    list = AmountOfDeathsSex(data)
+    for elemento in list:
+        print(f'Manner of Death: {elemento.form}')
+        print(f'Amount Male: {elemento.male}')
+        print(f'Amount Female: {elemento.female}')
+        print(f'Amount Unknown: {elemento.unknown}')
+        print()
 
 
 # Data extracted from dataset
@@ -101,3 +195,5 @@ while op != 0:
         dataBase = LoadFile(fileName)
     elif op == 2:
         ShowData(dataBase)
+    elif op == 3:
+        ShowDetailsOfDeathPerGender(dataBase)
