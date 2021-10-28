@@ -109,20 +109,23 @@ def LoadFile(name):
 def showInformation(data, key):
     columns = data[key]
     print("Name:", columns.name, "\n"
-                               "Date:", columns.date, "\n"
-                                                    "Manner of death:", columns.mannerOfDeath, "\n"
-                                                                                    "Armed:", columns.armed, "\n"
-                                                                                                          "Age:",
+                                 "Date:", columns.date, "\n"
+                                                        "Manner of death:", columns.mannerOfDeath, "\n"
+                                                                                                   "Armed:",
+          columns.armed, "\n"
+                         "Age:",
           columns.age, "\n"
-                      "Gender:", columns.gender, "\n"
-                                             "Race:", columns.race, "\n"
-                                                                  "City:", columns.city, "State:", columns.state, "\n"
-                                                                                                             "Signs of mental illness:",
+                       "Gender:", columns.gender, "\n"
+                                                  "Race:", columns.race, "\n"
+                                                                         "City:", columns.city, "State:", columns.state,
+          "\n"
+          "Signs of mental illness:",
           columns.signsOfMentalIllness, "\n"
-                       "Threat level:", columns.threatLevel, "\n"
-                                                     "Flee:", columns.flee, "\n"
-                                                                           "Body camera:", columns.bodyCamera, "\n"
-                                                                                                        "Arms category:",
+                                        "Threat level:", columns.threatLevel, "\n"
+                                                                              "Flee:", columns.flee, "\n"
+                                                                                                     "Body camera:",
+          columns.bodyCamera, "\n"
+                              "Arms category:",
           columns.armsCategory
           )
 
@@ -173,7 +176,7 @@ def AmountOfDeathsSex(data):  # Create detail list of death per gender
     return listWithAmount
 
 
-# Op 3
+# Op 3 - Show Death detail per gender
 def ShowDetailsOfDeathPerGender(data):  # Show the final result
     list = AmountOfDeathsSex(data)
     for elemento in list:
@@ -182,6 +185,51 @@ def ShowDetailsOfDeathPerGender(data):  # Show the final result
         print(f'Amount Female: {elemento.female}')
         print(f'Amount Unknown: {elemento.unknown}')
         print()
+
+
+# Op 4 - Average of state deaths from a specific weapon
+def ShowAverageOfStateWithOnceWeapon(data, state, weapon):
+    cont = 0
+    amountDeath = 0
+    for element in data.values():
+        cont += 1
+        if state == element.state and weapon == element.armed:
+            amountDeath += 1
+    average = (amountDeath / cont) * 100
+    print(f'The average of people who died in {state} with {weapon}\n'
+          f'is {average :.2f}%')
+
+
+# Op 5
+def DeathByRace(data, race):  # the percentage of men and women of a race who were killed
+    contM = 0
+    contF = 0
+    contUnknown = 0
+    for element in data.values():
+        if element.race == race:
+            if element.gender == 'F':
+                contF += 1
+            elif element.gender == 'M':
+                contM += 1
+            else:
+                contUnknown += 1
+    averageM = (contM / len(data)) * 100
+    averageF = (contF / len(data)) * 100
+    averageUnknown = (contUnknown / len(data)) * 100
+    print(f'Origin: {race}\n'
+          f'Men: {averageM :.2f}%\n'
+          f'Women: {averageF :.2f}%\n'
+          f'Women: {averageUnknown :.2f}%')
+
+def AmountPerRace(data):
+    dic = {}
+    for element in data.values():
+        if element.race not in dic:
+            dic[element.race] = 1
+        else:
+            dic[element.race] += 1
+    for chave in dic.keys():
+        print(f'{chave} tem {dic[chave]} mortes')
 
 
 # Data extracted from dataset
@@ -197,3 +245,15 @@ while op != 0:
         ShowData(dataBase)
     elif op == 3:
         ShowDetailsOfDeathPerGender(dataBase)
+    elif op == 4:
+        state = 'FL'
+        weapon = 'gun'
+        ShowAverageOfStateWithOnceWeapon(dataBase, state, weapon)
+    elif op == 5:
+        race = 'White'
+        DeathByRace(dataBase, race)
+        print()
+        race = 'Black'
+        DeathByRace(dataBase, race)
+    elif op == 6:
+        AmountPerRace(dataBase)
