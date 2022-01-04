@@ -128,12 +128,11 @@ def ShowData(data):
     for key in data.keys():
         showInformation(data, key)
 
-
-def MainFormsOfDeath(data):  # Creating a list of the top 10 forms of death
+# Op 3 Creating a list of the top 10 forms of death
+def MainFormsOfDeath(data):
     mainFormsOfDeath = []
     for value in data.values():
-        exist = VerifyElementInList(mainFormsOfDeath, value.mannerOfDeath)
-        if not exist:
+        if value.mannerOfDeath not in mainFormsOfDeath:
             mainFormsOfDeath.append(value.mannerOfDeath)
         if len(mainFormsOfDeath) > 10:
             break
@@ -171,7 +170,6 @@ def AmountOfDeathsSex(data):  # Create detail list of death per gender
     return listWithAmount
 
 
-# Op 3 - Show Death detail per gender
 def ShowDetailsOfDeathPerGender(data):  # Show the final result
     list = AmountOfDeathsSex(data)
     for elemento in list:
@@ -182,7 +180,7 @@ def ShowDetailsOfDeathPerGender(data):  # Show the final result
         print()
 
 
-# Op 4 - Average of state deaths from a specific weapon
+# Op 4  Average of state deaths from a specific weapon
 def ShowAverageOfStateWithOnceWeapon(data, state, weapon):
     cont = 0
     amountDeath = 0
@@ -238,8 +236,7 @@ def ShowList(list):
 def NamesList(data):  # Create name list with all names
     nameList = []
     for element in data.values():
-        exists = VerifyElementInList(nameList, element.name)
-        if not exists:
+        if element.name not in nameList:
             nameList.append(element.name)
     return nameList
 
@@ -452,10 +449,8 @@ while op != 0:
         namesList = NamesList(dataBase)
         ShowList(namesList)
         name1 = input('Victim 1: ').title()
-        exists1 = VerifyElementInList(namesList, name1)
         name2 = input('Victim 2: ').title()
-        exists2 = VerifyElementInList(namesList, name2)
-        if not exists1 or not exists2:
+        if name1 not in namesList or name2 not in namesList:
             print('Name not found')
         else:
             ShowDataEquality(dataTittle, dataBase, name1, name2)
