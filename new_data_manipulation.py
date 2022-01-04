@@ -214,7 +214,7 @@ def DeathByRace(data, race):
     print(f'Origin: {race}\n'
           f'Men: {averageM :.2f}%\n'
           f'Women: {averageF :.2f}%\n'
-          f'Women: {averageUnknown :.2f}%')
+          f'Unknown: {averageUnknown :.2f}%')
 
 
 # Op 6 - Amount people per race
@@ -226,7 +226,7 @@ def AmountPerRace(data):
         else:
             dic[element.race] += 1
     for chave in dic.keys():
-        print(f'{chave} tem {dic[chave]} mortes')
+        print(f'{chave} has {dic[chave]} mortes')
 
 
 # Op 7 - Compare data between 2 victim
@@ -306,7 +306,6 @@ def RecordedMurders(fromDate, toDate, data):
                 dicCamera[year] += 1
 
     for key in dic.keys():
-        print(dicCamera[key], dic[key])
         media = (dicCamera[key] / dic[key]) * 100
         print(f'Year: {key} \n Murderers: {dic[key]} \n'
               f'Recorded Murders: {media :.2f}%')
