@@ -31,12 +31,14 @@ The file "first_data_manipulation.py" was the first version made and is in Portu
             are dictionaries and, unlike the previous version, the function now allocates the data in a class 
             and returns a dictionary with the values.
             
-    - [2] - Show data loaded
-            - [1° version] - 
-            - [2° version] -
-    - [3] - Load data of file
-            - [1° version] - 
-            - [2° version] -
+    ### [2] - Show data loaded
+            - [1° version] - The function cycles through the array and displays the data.
+            - [2° version] - The function cycles through the dictionary and displays the data
+            
+    ### [3] - List with the top 10 forms of death and their number
+            - [1° version] - This option is divided into 4 functions to show the ten main ways to die. 
+            Although there aren't 10 shapes in the dataset, if we had it would work normally.
+            - [2° version] - 
     - [4] - Load data of file
             - [1° version] - 
             - [2° version] -
