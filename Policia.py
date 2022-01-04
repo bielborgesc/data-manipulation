@@ -188,7 +188,7 @@ def VerAssassinosGravados(mat,inicio,fim):#o ano e qual o percentual dos assassi
 #Op 10
 def ListaArmas(mat):#Cria uma lista com as armas
     listaArmas = []
-    for i in range(1,len(mat)):
+    for i in range(1,len(mat)):#1
         existe = VerificarNaLista(listaArmas,mat[i][4])
         if existe == False:
             listaArmas.append(mat[i][4])
@@ -196,11 +196,11 @@ def ListaArmas(mat):#Cria uma lista com as armas
 def ListarArmasMes(mat):#Essa def irá calcular a arma mais usada por mes em cada ano
     listaGeral = []
     listaArmas = ListaArmas(mat)
-    for ano in range(2015,2021):
-        for mes in range(1,13):
-            for elemento in listaArmas:
+    for ano in range(2015,2021):#2
+        for mes in range(1,13):#3
+            for elemento in listaArmas:#4
                 usado = 0
-                for i in range(1,len(mat)):
+                for i in range(1,len(mat)):#5
                     data = mat[i][2]
                     year = data[6:]
                     month = data[3:5]
@@ -216,14 +216,14 @@ def ListarArmasMes(mat):#Essa def irá calcular a arma mais usada por mes em cad
 def SepararSemestre(mat):#Essa def irá separar por semestre
     listaArmas = ListarArmasMes(mat)
     listaTrimestre = []
-    for ano in range(2015,2021):
+    for ano in range(2015,2021):#6
         trimestre = 0
         maior = 0
         nome = ''
         cont = 0
-        for mes in range(1,13):
+        for mes in range(1,13):#7
             trimestre += 1
-            for elemento in listaArmas:
+            for elemento in listaArmas:#8
                 if int(elemento.mes) == mes:
                     if trimestre == 3:
                         listaTrimestre.append(nome)
@@ -238,7 +238,7 @@ def MostrarArmasSemestre(mat):#Essa def ira mostrar a melhor arma em cada trimes
     lista = SepararSemestre(mat)
     ano = 2015
     trimestre = 1
-    for i in range(len(lista)):
+    for i in range(len(lista)):#9
         if trimestre == 5:
             trimestre = 1
             ano += 1

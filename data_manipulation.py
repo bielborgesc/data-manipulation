@@ -1,9 +1,13 @@
+from math import ceil
+import operator
+
+
 class Person:
     def __init__(self):
         self.name: ''
         self.date: ''
         self.mannerOfDeath: ''
-        self.armed: ''
+        self.weapon: ''
         self.age: ''
         self.gender: ''
         self.race: ''
@@ -18,18 +22,10 @@ class Person:
 
 class Death:  # Class for a list of the top 10 ways people were killed
     def __init__(self):
+        self.unknown = ''
         self.form = ''
         self.male = 0
         self.female = 0
-        self.unknown = 0
-
-
-class Weapons:  # This class will help with weapons accounts for the semester
-    def __init__(self):
-        self.weapon = ''
-        self.amount = 0
-        self.month = 0
-        self.year = 0
 
 
 class Victims:  # This class was created to sort the states with victims in ascending order
@@ -59,12 +55,12 @@ def chooseMenuOption():  # The Menu
         '7 - Similar data between 2 victims\n'
         '8 - Show the month with the most deaths\n'
         '9 - See percentage murderers are recorded per year\n'
-        '10 - Most used weapon per semester\n'
+        '10 - Most used weapon per quarter\n'
         '11 - Show percentage of white victims who fled\n'
         '12 - Show in ascending order the number of victims in each state\n'
         '13 - Show Victims for each year in ascending order\n'
         '14 - Relationship between two files\n'
-        '14 - Check if there was any date of similar violence between the two files\n'
+        '15 - Check if there was any date of similar violence between the two files\n'
         '0 - Exit'
     )
     return input('Opção: ')
@@ -75,15 +71,17 @@ def LoadFile(name):
     try:
         firstLine = True
         dataBase = []
+        dataBaseTittle = []
+        dataForRetur = []
         file = open(name, 'r')
         for line in file:
+            data = line.split(';')
             if not firstLine:
-                data = line.split(';')
                 p = Person()
                 p.name = data[1]
                 p.date = data[2]
                 p.mannerOfDeath = data[3]
-                p.armed = data[4]
+                p.weapon = data[4]
                 p.age = data[5]
                 p.gender = data[6]
                 p.race = data[7]
@@ -96,10 +94,13 @@ def LoadFile(name):
                 p.armsCategory = data[14]
                 dataBase.append((data[0], p))
             else:
+                dataBaseTittle = data
                 firstLine = False
         file.close()
         showMessage('Data Loaded with success')
-        return dict(dataBase)
+        dataForRetur.append(dataBase)
+        dataForRetur.append(dataBaseTittle)
+        return dataForRetur
 
     except:
         showMessageError('Error returned')
@@ -111,8 +112,8 @@ def showInformation(data, key):
     print("Name:", columns.name, "\n"
                                  "Date:", columns.date, "\n"
                                                         "Manner of death:", columns.mannerOfDeath, "\n"
-                                                                                                   "Armed:",
-          columns.armed, "\n"
+                                                                                                   "Weapon:",
+          columns.weapon, "\n"
                          "Age:",
           columns.age, "\n"
                        "Gender:", columns.gender, "\n"
@@ -142,6 +143,8 @@ def MainFormsOfDeath(data):  # Creating a list of the top 10 forms of death
         exist = VerifyElementInList(mainFormsOfDeath, value.mannerOfDeath)
         if not exist:
             mainFormsOfDeath.append(value.mannerOfDeath)
+        if len(mainFormsOfDeath) > 10:
+            break
     return mainFormsOfDeath
 
 
@@ -193,7 +196,7 @@ def ShowAverageOfStateWithOnceWeapon(data, state, weapon):
     amountDeath = 0
     for element in data.values():
         cont += 1
-        if state == element.state and weapon == element.armed:
+        if state == element.state and weapon == element.weapon:
             amountDeath += 1
     average = (amountDeath / cont) * 100
     print(f'The average of people who died in {state} with {weapon}\n'
@@ -221,6 +224,8 @@ def DeathByRace(data, race):  # the percentage of men and women of a race who we
           f'Women: {averageF :.2f}%\n'
           f'Women: {averageUnknown :.2f}%')
 
+
+# Op 6 - Amount people per race
 def AmountPerRace(data):
     dic = {}
     for element in data.values():
@@ -232,15 +237,153 @@ def AmountPerRace(data):
         print(f'{chave} tem {dic[chave]} mortes')
 
 
+# Op 7 - Compare data between 2 victim
+def ShowList(list):
+    for element in list:
+        print(element)
+
+
+def NamesList(data):  # Create name list with all names
+    nameList = []
+    for element in data.values():
+        exists = VerifyElementInList(nameList, element.name)
+        if not exists:
+            nameList.append(element.name)
+    return nameList
+
+
+# Transform the dictionary in list with values
+def TransformDictionaryInList(dict):
+    list = []
+    for value in dict.values():
+        list.append(value)
+    return list
+
+
+def VerifyDataEquality(dataTittle, nameData1, nameData2):  # Compare information and return a dictionary
+    dic = {}
+    nameData1 = nameData1.__dict__
+    nameData2 = nameData2.__dict__
+    listData1 = TransformDictionaryInList(nameData1)
+    # print(dataTittle)
+    listData2 = TransformDictionaryInList(nameData2)
+    for i in range(len(listData1)):
+        if listData1[i] == listData2[i]:
+            dic[dataTittle[i + 1]] = listData2[i]
+    return dic
+
+
+def ShowDataEquality(dataTittle, data, name1, name2):  # Show data equality
+    nameData1 = ''
+    nameData2 = ''
+    for element in data.values():
+        if element.name == name1:
+            nameData1 = element
+        if element.name == name2:
+            nameData2 = element
+    dic = VerifyDataEquality(dataTittle, nameData1, nameData2)
+    print('They have in common: ')
+    for chave in dic.keys():
+        print(chave, '->', dic[chave])
+
+
+def monthInWhichThereWereMoreDeaths(data):  # month of the year with the most deaths
+    dic = {}
+    for value in data.values():
+        month = value.date[3:5]
+        if month not in dic:
+            dic[month] = 1
+        else:
+            dic[month] += 1
+    bigger = max(dic, key=dic.get)
+    print(f'The month with the highest deaths was {bigger} with {dic[bigger]} deaths')
+
+
+# Op 9
+def RecordedMurders(fromDate, toDate, data):  # percentage of registered murders
+    dic = {}
+    dicCamera = {}
+    for element in data.values():
+        year = int(element.date[6:])
+        if fromDate <= year <= toDate:
+            if year not in dic:
+                dic[year] = 1
+            else:
+                dic[year] += 1
+            if element.bodyCamera == "True" and year not in dicCamera:
+                dicCamera[year] = 1
+            elif element.bodyCamera == "True" and year in dicCamera:
+                dicCamera[year] += 1
+
+    for key in dic.keys():
+        print(dicCamera[key], dic[key])
+        media = (dicCamera[key] / dic[key]) * 100
+        print(f'Year: {key} \n Murderers: {dic[key]} \n'
+              f'Recorded Murders: {media :.2f}%')
+        print()
+
+
+def checkTheBiggestWeaponUsedInAGivenPeriod(quarter, year, dataBase):
+    dicWeapon = {}
+
+    for element in dataBase.values():
+        date = element.date  # day = date[0:2] month = date[3:5] year = date[6:]
+        thisQuarter = ceil(int(date[3:5]) / 3)  # dividing the month by 3 and rounding to the nearest whole number we can find out which quarter it is in
+        if thisQuarter == quarter and date[6:] == year:
+            if element.weapon not in dicWeapon:
+                dicWeapon[element.weapon] = 1
+            else:
+                dicWeapon[element.weapon] += 1
+
+    if len(dicWeapon.items()) >1:
+        max_key = max(dicWeapon.items(), key=operator.itemgetter(1))[0]
+        return [max_key, dicWeapon[max_key]]
+
+    return ["No records found", 0]
+
+
+
+# Op 10
+def MostUsedWeaponInTheQuarter(dataBase):  # most used weapons per quarter
+    years = []  # list with years
+    matriz = []  # cubic matrix with quarter year and most used weapon
+
+    for element in dataBase.values():  # extracting some data
+        if (element.date[6:] not in years):
+            years.append(element.date[6:])
+
+    for i in range(len(years)):  # creating matrix with data
+        print(f'Ano: {years[i]}')
+        for j in range(1, 5, 1):
+            linha = ['', '', '']
+            linha[0] = years[i]  # year
+            linha[1] = j # qurter
+            linha[2] = checkTheBiggestWeaponUsedInAGivenPeriod(j, years[i], dataBase)
+            matriz.append(linha)
+            print(f'Trimestre: {j} | Weapon: {linha[2][0]} | Amout: {linha[2][1]}')
+        print('-'*10)
+
+
 # Data extracted from dataset
 dataBase = ()
+dataTittle = []
 # Start Program
 op = -1
+
+# if you do not want automatic file loading, delete the next 4 lines and use option 1 from the menu #
+fileName = 'Arquivo Originas Coluna.csv'
+data = LoadFile(fileName)
+dataBase = dict(data[0])
+dataTittle = data[1]
+# -------------------------------------------------------------------------------------------------- #
+
 while op != 0:
     op = int(chooseMenuOption())
     if op == 1:
         fileName = 'Arquivo Originas Coluna.csv'
-        dataBase = LoadFile(fileName)
+        data = LoadFile(fileName)
+        dataBase = dict(data[0])
+        dataTittle = data[1]
     elif op == 2:
         ShowData(dataBase)
     elif op == 3:
@@ -250,10 +393,26 @@ while op != 0:
         weapon = 'gun'
         ShowAverageOfStateWithOnceWeapon(dataBase, state, weapon)
     elif op == 5:
-        race = 'White'
-        DeathByRace(dataBase, race)
-        print()
-        race = 'Black'
+        race = 'Asian'
         DeathByRace(dataBase, race)
     elif op == 6:
         AmountPerRace(dataBase)
+    elif op == 7:
+        namesList = NamesList(dataBase)
+        ShowList(namesList)
+        name1 = input('Victim 1: ').title()
+        exists1 = VerifyElementInList(namesList, name1)
+        name2 = input('Victim 2: ').title()
+        exists2 = VerifyElementInList(namesList, name2)
+        if not exists1 or not exists2:
+            print('Name not found')
+        else:
+            ShowDataEquality(dataTittle, dataBase, name1, name2)
+    elif op == 8:
+        monthInWhichThereWereMoreDeaths(dataBase)
+    elif op == 9:
+        fromDate = 2015
+        toDate = 2020
+        RecordedMurders(fromDate, toDate, dataBase)
+    elif op == 10:
+        MostUsedWeaponInTheQuarter(dataBase)
