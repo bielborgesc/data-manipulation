@@ -360,7 +360,7 @@ op = -1
 while op != 0:
     op = int(Menu())
     if op == 1:
-        arquivo = 'Arquivo Originas Coluna.csv'
+        arquivo = 'corrected_dataset.csv'
         CarregarArquivo(matriz,arquivo)
     elif op == 2:
         MostrarArquivo(matriz)
@@ -400,6 +400,6 @@ while op != 0:
     elif op == 13:
         MostrarAnoVitimas(matriz)
     elif op == 14:
-        arquivo = 'Meu escopo.csv'
+        arquivo = 'invented_dataset.csv'
         CarregarArquivo(matriz2, arquivo)
         MostrarDados(matriz,matriz2)

@@ -2,7 +2,7 @@ from math import ceil
 import operator
 
 
-class Person:
+class Person:  # Person class, this is the main class
     def __init__(self):
         self.name: ''
         self.date: ''
@@ -28,11 +28,11 @@ class Death:  # Class for a list of the top 10 ways people were killed
         self.female = 0
 
 
-def showMessage(msg):
+def showMessage(msg):  # function to display common message
     print("====================", "\n", msg, "\n" "====================" "\n")
 
 
-def showMessageError(msg):
+def showMessageError(msg):  # function to display error message
     print("*********************", "\n", msg, "\n" "*********************" "\n")
 
 
@@ -195,8 +195,8 @@ def ShowAverageOfStateWithOnceWeapon(data, state, weapon):
           f'is {average :.2f}%')
 
 
-# Op 5
-def DeathByRace(data, race):  # the percentage of men and women of a race who were killed
+# Op 5 - the percentage of men and women of a race who were killed
+def DeathByRace(data, race):
     contM = 0
     contF = 0
     contUnknown = 0
@@ -244,8 +244,7 @@ def NamesList(data):  # Create name list with all names
     return nameList
 
 
-# Transform the dictionary in list with values
-def TransformDictionaryInList(dict):
+def TransformDictionaryInList(dict):  # Transform the dictionary in list with values
     list = []
     for value in dict.values():
         list.append(value)
@@ -274,8 +273,8 @@ def ShowDataEquality(dataTittle, data, name1, name2):  # Show data equality
             nameData2 = element
     dic = VerifyDataEquality(dataTittle, nameData1, nameData2)
     print('They have in common: ')
-    for chave in dic.keys():
-        print(chave, '->', dic[chave])
+    for key in dic.keys():
+        print(key, '->', dic[key])
 
 
 def monthInWhichThereWereMoreDeaths(data):  # month of the year with the most deaths
@@ -290,8 +289,8 @@ def monthInWhichThereWereMoreDeaths(data):  # month of the year with the most de
     print(f'The month with the highest deaths was {bigger} with {dic[bigger]} deaths')
 
 
-# Op 9
-def RecordedMurders(fromDate, toDate, data):  # percentage of registered murders
+# Op 9 - percentage of registered murders
+def RecordedMurders(fromDate, toDate, data):
     dic = {}
     dicCamera = {}
     for element in data.values():
@@ -314,13 +313,14 @@ def RecordedMurders(fromDate, toDate, data):  # percentage of registered murders
         print()
 
 
-def checkTheBiggestWeaponUsedInAGivenPeriod(quarter, year, dataBase):
+def checkTheBiggestWeaponUsedInAGivenPeriod(quarter, year,
+                                            dataBase):  # check which weapon was used the most in a period
     dicWeapon = {}
 
     for element in dataBase.values():
         date = element.date  # day = date[0:2] month = date[3:5] year = date[6:]
-        thisQuarter = ceil(int(date[
-                               3:5]) / 3)  # dividing the month by 3 and rounding to the nearest whole number we can find out which quarter it is in
+        thisQuarter = ceil(int(date[3:5]) / 3)  # dividing the month by 3 and rounding to the nearest whole number we
+        # can find out which quarter it is in
         if thisQuarter == quarter and date[6:] == year:
             if element.weapon not in dicWeapon:
                 dicWeapon[element.weapon] = 1
@@ -334,13 +334,13 @@ def checkTheBiggestWeaponUsedInAGivenPeriod(quarter, year, dataBase):
     return ["No records found", 0]
 
 
-# Op 10
-def MostUsedWeaponInTheQuarter(dataBase):  # most used weapons per quarter
+# Op 10 - most used weapons per quarter
+def MostUsedWeaponInTheQuarter(dataBase):
     years = []  # list with years
     matriz = []  # cubic matrix with quarter year and most used weapon
 
     for element in dataBase.values():  # extracting some data
-        if (element.date[6:] not in years):
+        if element.date[6:] not in years:
             years.append(element.date[6:])
 
     for i in range(len(years)):  # creating matrix with data
@@ -355,8 +355,8 @@ def MostUsedWeaponInTheQuarter(dataBase):  # most used weapons per quarter
         print('-' * 10)
 
 
-# Op 11
-def VictimList(dataBase):  # Create a list of white victims who fled
+# Op 11 - Create a list of white victims who fled
+def VictimList(dataBase):
     whitePeople = []
     for element in dataBase.values():
         if element.race == 'White' and element.threatLevel != 'Not fleeing':
@@ -365,15 +365,15 @@ def VictimList(dataBase):  # Create a list of white victims who fled
     return whitePeople
 
 
-def ListWhitePeopleWhoFled(dataBase):  # Informa o percentual
+def ListWhitePeopleWhoFled(dataBase):  # informs the percentage of white people who fled
     list = VictimList(dataBase)
     amount = len(dataBase.values())
     percentage = (len(list) / amount) * 100
-    print(f'{len(list)} vitimas brancas fugiram e isso da um percentual de {percentage :.2f}% de {amount}')
+    print(f'{len(list)} white victims fled and this gives a percentage of {percentage :.2f}% of {amount}')
 
 
-# Op 12
-def TotalNumberOfVictimsByStateInAscendingOrder(dataBase):  # This def will show the total number of victims by state.
+# Op 12 - This def will show the total number of victims by state.
+def TotalNumberOfVictimsByStateInAscendingOrder(dataBase):
     victimsByState = {}
     for element in dataBase.values():
         if element.state not in victimsByState:
@@ -385,8 +385,8 @@ def TotalNumberOfVictimsByStateInAscendingOrder(dataBase):  # This def will show
         print(f'The State {element[0]} has {element[1]} victims')
 
 
-# Op 13
-def TotalNumberOfVictimsByYearInAscendingOrder(dataBase):  # display victims per year
+# Op 13 - display victims per year
+def TotalNumberOfVictimsByYearInAscendingOrder(dataBase):
     victimsByYear = {}
     for element in dataBase.values():
         if element.date[6:] not in victimsByYear:
@@ -398,46 +398,8 @@ def TotalNumberOfVictimsByYearInAscendingOrder(dataBase):  # display victims per
         print(f'The Years {element[0]} had {element[1]} victims')
 
 
-def PegarDados(mat, indice):  # Essa def vai pegar dados do arquivo
-    lista = []
-    for i in range(1, len(mat)):
-        lista.append(mat[i][indice])
-    return lista
-
-
-def CompararArquivos(mat, mat2):  # Essa def vai comparar os dados
-    lista1 = PegarDados(mat2, 2)
-    listaAgrupada = []
-    for data in lista1:
-        for i in range(len(mat)):
-            if mat[i][2] == data:
-                listaAgrupada.append(mat[i])
-    return listaAgrupada
-
-
-def MostrarDados(mat, mat2):  # Essa def vai mostrar todos os dados das datas iguais do dois arquivos
-    linhaMat1 = CompararArquivos(mat, mat2)  # Lista com os dados de determinada data
-    datasMat2 = PegarDados(mat2, 2)  # Lista das datas
-    for data in datasMat2:
-        print(f'====={data}=====')
-        for elemento in linhaMat1:
-            if elemento[2] == data:
-                print('Arquivo 1')
-                print(f'Nome: {elemento[1]}'
-                      f'Data: {elemento[2]}'
-                      f'Sexo: {elemento[6]}'
-                      f'Morte: {elemento[4]}')
-        for i in range(1, len(mat2)):
-            if mat2[i][2] == data:
-                print('Arquivo 2')
-                print(f'Nome: {mat2[i][1]}'
-                      f'Data: {mat2[i][2]}'
-                      f'Sexo: {mat2[i][6]}'
-                      f'Morte: {mat2[i][4]}')
-
-
-# Op 14
-def ShowResult(dataBase1, dataBase2):  # This function will show all the data of the same dates of the two files
+# Op 14 - This function will show all the data of the same dates of the two files
+def ShowResult(dataBase1, dataBase2):
     for element2 in dataBase2.values():
         for element1 in dataBase1.values():
             if element1.date == element2.date:
@@ -461,7 +423,7 @@ dataTittle = []
 op = -1
 
 # if you do not want automatic file loading, delete the next 4 lines and use option 1 from the menu #
-fileName = 'Arquivo Originas Coluna.csv'
+fileName = 'corrected_dataset.csv'
 data = LoadFile(fileName)
 dataBase = dict(data[0])
 dataTittle = data[1]
@@ -470,7 +432,7 @@ dataTittle = data[1]
 while op != 0:
     op = int(chooseMenuOption())
     if op == 1:
-        fileName = 'Arquivo Originas Coluna.csv'
+        fileName = 'corrected_dataset.csv'
         data = LoadFile(fileName)
         dataBase = dict(data[0])
         dataTittle = data[1]
@@ -513,7 +475,7 @@ while op != 0:
     elif op == 13:
         TotalNumberOfVictimsByYearInAscendingOrder(dataBase)
     elif op == 14:
-        file = 'Meu escopo.csv'
+        file = 'invented_dataset.csv'
         data = LoadFile(file)
         dataTittle = data[1]
         dataBase2 = dict(data[0])
