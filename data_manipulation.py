@@ -28,13 +28,6 @@ class Death:  # Class for a list of the top 10 ways people were killed
         self.female = 0
 
 
-class Victims:  # This class was created to sort the states with victims in ascending order
-    def __init__(self):
-        self.estado = ''
-        self.qtdd = 0
-        self.ano = 0
-
-
 def showMessage(msg):
     print("====================", "\n", msg, "\n" "====================" "\n")
 
@@ -59,8 +52,7 @@ def chooseMenuOption():  # The Menu
         '11 - Show percentage of white victims who fled\n'
         '12 - Show in ascending order the number of victims in each state\n'
         '13 - Show Victims for each year in ascending order\n'
-        '14 - Relationship between two files\n'
-        '15 - Check if there was any date of similar violence between the two files\n'
+        '14 - Check if there was any date of similar violence between the two files\n'
         '0 - Exit'
     )
     return input('Opção: ')
@@ -114,7 +106,7 @@ def showInformation(data, key):
                                                         "Manner of death:", columns.mannerOfDeath, "\n"
                                                                                                    "Weapon:",
           columns.weapon, "\n"
-                         "Age:",
+                          "Age:",
           columns.age, "\n"
                        "Gender:", columns.gender, "\n"
                                                   "Race:", columns.race, "\n"
@@ -265,7 +257,6 @@ def VerifyDataEquality(dataTittle, nameData1, nameData2):  # Compare information
     nameData1 = nameData1.__dict__
     nameData2 = nameData2.__dict__
     listData1 = TransformDictionaryInList(nameData1)
-    # print(dataTittle)
     listData2 = TransformDictionaryInList(nameData2)
     for i in range(len(listData1)):
         if listData1[i] == listData2[i]:
@@ -328,19 +319,19 @@ def checkTheBiggestWeaponUsedInAGivenPeriod(quarter, year, dataBase):
 
     for element in dataBase.values():
         date = element.date  # day = date[0:2] month = date[3:5] year = date[6:]
-        thisQuarter = ceil(int(date[3:5]) / 3)  # dividing the month by 3 and rounding to the nearest whole number we can find out which quarter it is in
+        thisQuarter = ceil(int(date[
+                               3:5]) / 3)  # dividing the month by 3 and rounding to the nearest whole number we can find out which quarter it is in
         if thisQuarter == quarter and date[6:] == year:
             if element.weapon not in dicWeapon:
                 dicWeapon[element.weapon] = 1
             else:
                 dicWeapon[element.weapon] += 1
 
-    if len(dicWeapon.items()) >1:
+    if len(dicWeapon.items()) > 1:
         max_key = max(dicWeapon.items(), key=operator.itemgetter(1))[0]
         return [max_key, dicWeapon[max_key]]
 
     return ["No records found", 0]
-
 
 
 # Op 10
@@ -357,11 +348,110 @@ def MostUsedWeaponInTheQuarter(dataBase):  # most used weapons per quarter
         for j in range(1, 5, 1):
             linha = ['', '', '']
             linha[0] = years[i]  # year
-            linha[1] = j # qurter
+            linha[1] = j  # qurter
             linha[2] = checkTheBiggestWeaponUsedInAGivenPeriod(j, years[i], dataBase)
             matriz.append(linha)
             print(f'Trimestre: {j} | Weapon: {linha[2][0]} | Amout: {linha[2][1]}')
-        print('-'*10)
+        print('-' * 10)
+
+
+# Op 11
+def VictimList(dataBase):  # Create a list of white victims who fled
+    whitePeople = []
+    for element in dataBase.values():
+        if element.race == 'White' and element.threatLevel != 'Not fleeing':
+            if element.name not in whitePeople:
+                whitePeople.append(element.name)
+    return whitePeople
+
+
+def ListWhitePeopleWhoFled(dataBase):  # Informa o percentual
+    list = VictimList(dataBase)
+    amount = len(dataBase.values())
+    percentage = (len(list) / amount) * 100
+    print(f'{len(list)} vitimas brancas fugiram e isso da um percentual de {percentage :.2f}% de {amount}')
+
+
+# Op 12
+def TotalNumberOfVictimsByStateInAscendingOrder(dataBase):  # This def will show the total number of victims by state.
+    victimsByState = {}
+    for element in dataBase.values():
+        if element.state not in victimsByState:
+            victimsByState[element.state] = 0
+        else:
+            victimsByState[element.state] += 1
+    sortedDict = sorted(victimsByState.items(), key=operator.itemgetter(1))
+    for element in sortedDict:
+        print(f'The State {element[0]} has {element[1]} victims')
+
+
+# Op 13
+def TotalNumberOfVictimsByYearInAscendingOrder(dataBase):  # display victims per year
+    victimsByYear = {}
+    for element in dataBase.values():
+        if element.date[6:] not in victimsByYear:
+            victimsByYear[element.date[6:]] = 0
+        else:
+            victimsByYear[element.date[6:]] += 1
+    sortedDict = sorted(victimsByYear.items(), key=operator.itemgetter(1))
+    for element in sortedDict:
+        print(f'The Years {element[0]} had {element[1]} victims')
+
+
+def PegarDados(mat, indice):  # Essa def vai pegar dados do arquivo
+    lista = []
+    for i in range(1, len(mat)):
+        lista.append(mat[i][indice])
+    return lista
+
+
+def CompararArquivos(mat, mat2):  # Essa def vai comparar os dados
+    lista1 = PegarDados(mat2, 2)
+    listaAgrupada = []
+    for data in lista1:
+        for i in range(len(mat)):
+            if mat[i][2] == data:
+                listaAgrupada.append(mat[i])
+    return listaAgrupada
+
+
+def MostrarDados(mat, mat2):  # Essa def vai mostrar todos os dados das datas iguais do dois arquivos
+    linhaMat1 = CompararArquivos(mat, mat2)  # Lista com os dados de determinada data
+    datasMat2 = PegarDados(mat2, 2)  # Lista das datas
+    for data in datasMat2:
+        print(f'====={data}=====')
+        for elemento in linhaMat1:
+            if elemento[2] == data:
+                print('Arquivo 1')
+                print(f'Nome: {elemento[1]}'
+                      f'Data: {elemento[2]}'
+                      f'Sexo: {elemento[6]}'
+                      f'Morte: {elemento[4]}')
+        for i in range(1, len(mat2)):
+            if mat2[i][2] == data:
+                print('Arquivo 2')
+                print(f'Nome: {mat2[i][1]}'
+                      f'Data: {mat2[i][2]}'
+                      f'Sexo: {mat2[i][6]}'
+                      f'Morte: {mat2[i][4]}')
+
+
+# Op 14
+def ShowResult(dataBase1, dataBase2):  # This function will show all the data of the same dates of the two files
+    for element2 in dataBase2.values():
+        for element1 in dataBase1.values():
+            if element1.date == element2.date:
+                print(f'====={element2.date}=====')
+                print('Arquivo 1')
+                print(f'Name: {element1.name} \n'
+                      f'Date: {element1.date} \n'
+                      f'Sexo: {element1.gender} \n'
+                      f'Morte: {element1.mannerOfDeath} \n')
+                print('Arquivo 2')
+                print(f'Name: {element2.name} \n'
+                      f'Date: {element2.date} \n'
+                      f'Sexo: {element2.gender} \n'
+                      f'Morte: {element2.mannerOfDeath} \n')
 
 
 # Data extracted from dataset
@@ -416,3 +506,17 @@ while op != 0:
         RecordedMurders(fromDate, toDate, dataBase)
     elif op == 10:
         MostUsedWeaponInTheQuarter(dataBase)
+    elif op == 11:
+        ListWhitePeopleWhoFled(dataBase)
+    elif op == 12:
+        TotalNumberOfVictimsByStateInAscendingOrder(dataBase)
+    elif op == 13:
+        TotalNumberOfVictimsByYearInAscendingOrder(dataBase)
+    elif op == 14:
+        file = 'Meu escopo.csv'
+        data = LoadFile(file)
+        dataTittle = data[1]
+        dataBase2 = dict(data[0])
+        ShowResult(dataBase, dataBase2)
+    else:
+        print("Thanks for using our system, see you next time")
