@@ -6,7 +6,7 @@ This was my first job with data manipulation using only the Python language. Thi
 ## :mag: Objective
 The main goal was to rewrite the code using new concepts I've learned since then, concepts like software engineering, clean code, English, data structure and making the code as efficient as possible.
 
-## :hammer_and_wrench: Development
+## :computer: Development
  * I will explain and list the differences of the differents versions and their functions so that we can see in depth the optimization of the code.
 The file "data_manipulation.py" of folder V1 was the first version made and is in Portuguese, the file "data_manipulation.py" of folder V2 is the optimized code   and is in English. The the file "data_manipulation.ipynb" of folder V3 is de last version, I used some libraries like Pandas and write the code with Jupyter.
 
