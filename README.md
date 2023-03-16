@@ -19,7 +19,7 @@ The file "data_manipulation.py" of folder V1 was the first version made and is i
  * In front of each function is a brief comment saying what it does.
 
  * PLEASE SEE OPTION 10 OF BOTH VERSIONS, THEY SHOW A GREAT SPEED OF PRODUCTIVITY AND THE BIG CHANGE ABOUT MY EVOLUTION.
-
+ 
 ## :heavy_check_mark: Concluding
 Many values were entered locally, but you can very easily substitute an input.
 The code was produced to better adapt to new updates.
@@ -29,6 +29,7 @@ From v2 to v3 we can see how libraries such as pandas can give you more producti
 ## :arrow_forward: Run the code 
 To run this application, Jetbrains' Pycharm IDE was used (https://www.jetbrains.com/pt-br/pycharm/), but you can choose one of your choice. 
 The Python version used to develop the application was 3.10.6.
+I used libraries like Matplotlib (https://matplotlib.org/) and Pandas (https://pandas.pydata.org/).
 V1 and V2 can be run in Pycharm, but V3 needs to be run in Jupyter Notebook (https://jupyter.org/). I recommend using Anacondas (https://www.anaconda.com/products/distribution)
 
 ## :raising_hand_man: Developer
