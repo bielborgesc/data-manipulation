@@ -1,4 +1,4 @@
-### :construction:	WIP (WORK IN PROGRESS)
+### :heavy_check_mark:	FINISHED
 #### :orange_book: Final work of Programming Algorithms l
 # :policeman::computer: Handling Police Data
 This was my first job with data manipulation using only the Python language. This work was done in my first semester of college, and after 3 semesters I decide to rewrite the code to see how much I've evolved.
@@ -23,6 +23,8 @@ The file "data_manipulation.py" of folder V1 was the first version made and is i
 ## :heavy_check_mark: Concluding
 Many values were entered locally, but you can very easily substitute an input.
 The code was produced to better adapt to new updates.
+From v1 to v2 it is possible to notice an excellent optimization when we move from a more functional programming to one that is similar to OOP.
+From v2 to v3 we can see how libraries such as pandas can give you more productivity and fewer lines of code.
 
 ## :arrow_forward: Run the code 
 To run this application, Jetbrains' Pycharm IDE was used (https://www.jetbrains.com/pt-br/pycharm/), but you can choose one of your choice. 
